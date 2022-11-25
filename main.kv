@@ -1,0 +1,35 @@
+MainBoxLayout:
+    orientation: 'vertical'
+    BoxLayout:
+        size: 500, 50
+        size_hint: None, None
+        BoxLayout:
+            orientation: 'horizontal'
+            MDLabel:
+                text: "Drone battery: "
+            MDLabel:
+                text: root.battery_status
+        BoxLayout:
+            orientation: 'horizontal'
+            MDLabel:
+                text: root.gesture_status
+    BoxLayout:
+        orientation: 'vertical'
+        MDTopAppBar:
+            title: "Drone Gesture Controller"
+            md_bg_color: app.theme_cls.primary_color
+        Image:
+            texture: root.img_texture
+        BoxLayout:
+            size: 500, 50
+            size_hint: None, None
+            orientation: 'horizontal'
+            MDRoundFlatButton:
+                text: 'Connect'
+                on_press: root.connect_to_the_drone()
+            MDRoundFlatButton:
+                text: 'Start'
+                on_press: root.start_drone()
+            MDRoundFlatButton:
+                text: 'Land'
+                on_press: root.land_drone()
