@@ -7,7 +7,7 @@ class Classifier(object):
             self,
             # do testów, normalnie nie używac pełnej ściezki
             # _model_path=os.path.join(os.getcwd(), 'classifier.tflite'),
-            _model_path=r'C:\Users\siwie\Kivy\Lab2\classifier.tflite',
+            _model_path=r'classifier/classifier.tflite',
             _num_threads=1):
         # ładowanie modelu tflite
         self.interpreter=tf.lite.Interpreter(model_path=_model_path, num_threads=_num_threads)
