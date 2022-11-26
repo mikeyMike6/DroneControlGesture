@@ -66,8 +66,6 @@ class Drone:
             if self.in_air:
                 if move == Move.STOP:
                     self.stop()
-                elif move == Move.LAND and self.in_air:
-                    self.land()
                 elif move == Move.UP:
                     self.up()
                 elif move == Move.DOWN:

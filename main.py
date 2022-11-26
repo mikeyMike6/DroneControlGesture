@@ -86,7 +86,6 @@ class MainBoxLayout(MDBoxLayout):
         if self.connected:
             frame = self.frame_read.frame
             frame, gesture = self.gesture_rec.recognize_gesture_from(frame)
-            self.gesture_status = str(gesture)
             buffer = cv2.flip(frame, 0).tostring()
             texture = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
             texture.blit_buffer(buffer, colorfmt='bgr', bufferfmt='ubyte')
@@ -97,6 +96,7 @@ class MainBoxLayout(MDBoxLayout):
             print("GESTURE FROM BUFFOR: " + str(det_gesture))
             print("DIRECTION          : " + str(det_gesture))
             move = Move(det_gesture)
+            self.gesture_status = str(move)
             print("MOVE               : " + str(move))
             print("-----------------------")
             if move == Move.START and not self.drone.in_air:
