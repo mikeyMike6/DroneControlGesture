@@ -22,10 +22,12 @@ class MainBoxLayout(MDBoxLayout):
     gesture_status = StringProperty()
     battery_status = StringProperty()
     connected = BooleanProperty(False)
+    model_loaded = BooleanProperty(False)
     tello = Tello()
     drone = Drone(tello)
     gesture_rec = None
     frame_read = None
+    cam_loop = None
     gesture_buffor = GestureBuffer()
     img_texture = ObjectProperty(None)
 
@@ -47,7 +49,7 @@ class MainBoxLayout(MDBoxLayout):
         print('model loaded')
 
     def dron_control(self, gesture):
-        print(gesture)
+        print("DRONE CONTROL GESTURE: " + str(gesture))
         if not self.drone.in_air and gesture == Move.START:
             self.drone.start()
         if self.drone.in_air:
@@ -74,7 +76,7 @@ class MainBoxLayout(MDBoxLayout):
                 self.tello.streamon()
                 self.frame_read = self.tello.get_frame_read()
                 Clock.schedule_interval(self.get_battery_status, 5)
-                Clock.schedule_interval(self.load_video_from_drone, 1.0 / 30.0)
+                Clock.schedule_interval(self.load_video_from_drone, 1.0 / 10.0)
                 self.connected = True
 
     def get_battery_status(self, *args):
@@ -90,7 +92,19 @@ class MainBoxLayout(MDBoxLayout):
             texture.blit_buffer(buffer, colorfmt='bgr', bufferfmt='ubyte')
             self.img_texture = texture
             self.gesture_buffor.add_gesture(gesture.value)
-            move = Move(self.gesture_buffor.get_gesture())
+            det_gesture = self.gesture_buffor.get_gesture()
+            print("-----------------------")
+            print("GESTURE FROM BUFFOR: " + str(det_gesture))
+            print("DIRECTION          : " + str(det_gesture))
+            move = Move(det_gesture)
+            print("MOVE               : " + str(move))
+            print("-----------------------")
+            if move == Move.START and not self.drone.in_air:
+                self.drone.in_air = True
+                threading.Thread(target=self.drone.tello.takeoff, args=()).start()
+            if move == Move.LAND and self.drone.in_air:
+                self.drone.in_air = False
+                threading.Thread(target=self.drone.tello.land, args=()).start()
             threading.Thread(target=self.dron_control, args=(move,)).start()
 
 class MainApp(MDApp):

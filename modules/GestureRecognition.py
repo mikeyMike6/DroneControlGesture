@@ -65,6 +65,8 @@ def calculate_bounding(image, landmarks):
 
 
 class GestureRecognition:
+    model_loaded = False
+
     def __init__(self):
         self.hand, self.classifier, self.gesture_labels, = self.load_model()
 
@@ -74,6 +76,7 @@ class GestureRecognition:
             max_num_hands=1
         )
         classifier = Classifier()
+        self.model_loaded = True
         # load labels
 
         # do testów, normalnie nie używac pełnej ściezki

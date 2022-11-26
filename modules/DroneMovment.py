@@ -66,7 +66,7 @@ class Drone:
             if self.in_air:
                 if move == Move.STOP:
                     self.stop()
-                elif move == Move.LAND:
+                elif move == Move.LAND and self.in_air:
                     self.land()
                 elif move == Move.UP:
                     self.up()
@@ -86,10 +86,8 @@ class Drone:
                     self.back()
                 else:
                     self.stop()
-            if not self.in_air:
-                if move == Move.START:
-                    self.start()
         else:
             self.stop()
         self.tello.send_rc_control(self.left_right_velocity, self.forw_back_velocity,
                                    self.up_down_velocity, self.yaw_velocity)
+
